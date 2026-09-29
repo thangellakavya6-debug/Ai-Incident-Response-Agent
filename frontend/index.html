@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MemoryOps — AI Incident Response</title>
+<style>
+:root{
+  --bg:#0b1020; --panel:#121a2d; --panel2:#18233b; --line:#263554;
+  --text:#eef4ff; --muted:#9eacc7; --accent:#65d6ff; --green:#6ee7b7;
+  --yellow:#fcd34d; --red:#fb7185; --shadow:0 18px 60px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(135deg,#080d19,#101a30);color:var(--text)}
+button,input,textarea,select{font:inherit} button{cursor:pointer}
+.app{display:flex;min-height:100vh}.sidebar{width:245px;padding:28px 18px;border-right:1px solid var(--line);background:#0b1222}
+.logo{font-size:24px;font-weight:800;letter-spacing:-.5px;margin:4px 10px 5px}.logo span{color:var(--accent)}.tag{color:var(--muted);font-size:12px;margin:0 10px 28px}
+.nav button{display:block;width:100%;border:0;background:transparent;color:var(--muted);text-align:left;padding:13px 12px;border-radius:10px;margin:5px 0}.nav button.active,.nav button:hover{background:var(--panel2);color:var(--text)}
+.main{flex:1;padding:30px;max-width:1400px;margin:auto;width:100%}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.top h1{margin:0;font-size:30px}.status{font-size:12px;color:var(--green);padding:8px 12px;border:1px solid #245b4b;border-radius:20px;background:#0e211d}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card{background:rgba(18,26,45,.88);border:1px solid var(--line);border-radius:15px;padding:20px;box-shadow:var(--shadow)}.metric{font-size:28px;font-weight:800}.label{color:var(--muted);font-size:13px;margin-top:5px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.panel{background:rgba(18,26,45,.9);border:1px solid var(--line);border-radius:15px;padding:22px}.panel h2{margin:0 0 5px;font-size:19px}.panel p.sub{margin:0 0 18px;color:var(--muted);font-size:13px}
+.form{display:grid;gap:14px}.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{font-size:12px;color:var(--muted);display:grid;gap:7px}input,textarea,select{width:100%;border:1px solid var(--line);background:#0d1629;color:var(--text);padding:11px;border-radius:9px;outline:none}textarea{min-height:100px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+.primary{border:0;background:linear-gradient(135deg,#47c9f2,#5b8cff);color:#06111e;font-weight:800;padding:12px 16px;border-radius:10px}.secondary{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 14px;border-radius:9px}
+.hidden{display:none}.memory{border:1px solid var(--line);border-radius:12px;padding:14px;background:#0d1629;margin-top:10px}.memory .id{color:var(--accent);font-weight:700;font-size:12px}.memory strong{display:block;margin-top:5px}.memory small{color:var(--muted);line-height:1.5}.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;background:#2a2130;color:var(--yellow);margin-left:6px}
+.step{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.step:last-child{border-bottom:0}.num{width:27px;height:27px;border-radius:50%;background:#183c52;color:var(--accent);display:grid;place-items:center;font-weight:800}
+.recommend{border:1px solid #27576a;background:linear-gradient(135deg,#102735,#111d33);border-radius:12px;padding:16px;margin-top:12px}.why{color:var(--muted);font-size:13px;line-height:1.7}.toast{position:fixed;right:25px;bottom:25px;background:#13233b;border:1px solid #2e466b;padding:14px 17px;border-radius:11px;box-shadow:var(--shadow);display:none}
+@media(max-width:900px){.sidebar{display:none}.main{padding:18px}.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}}
+@media(max-width:550px){.cards,.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="logo">Memory<span>Ops</span></div>
+  <div class="tag">AI Incident Response Agent</div>
+  <div class="nav">
+    <button class="active" onclick="show('dashboard',this)">◈ Dashboard</button>
+    <button onclick="show('report',this)">＋ Report Incident</button>
+    <button onclick="show('analysis',this)">⌁ Analysis</button>
+    <button onclick="show('resolve',this)">✓ Resolve & Learn</button>
+  </div>
+</aside>
+
+<main class="main">
+<section id="dashboard">
+  <div class="top"><div><h1>Incident Command Center</h1><div class="label">Persistent operational memory powered by Hindsight</div></div><div class="status">● SYSTEM READY</div></div>
+  <div class="cards">
+    <div class="card"><div class="metric">12</div><div class="label">Active incidents</div></div>
+    <div class="card"><div class="metric">86</div><div class="label">Resolved incidents</div></div>
+    <div class="card"><div class="metric">18m</div><div class="label">Avg. resolution time</div></div>
+    <div class="card"><div class="metric">73</div><div class="label">Memory units</div></div>
+  </div>
+  <div class="grid">
+    <div class="panel"><h2>How MemoryOps works</h2><p class="sub">The learning loop behind every incident.</p>
+      <div class="step"><div class="num">1</div><div><b>Report</b><br><span class="label">Capture the incident and symptoms.</span></div></div>
+      <div class="step"><div class="num">2</div><div><b>Recall</b><br><span class="label">Search Hindsight for similar experiences.</span></div></div>
+      <div class="step"><div class="num">3</div><div><b>Recommend</b><br><span class="label">Combine memory with LLM reasoning.</span></div></div>
+      <div class="step"><div class="num">4</div><div><b>Learn</b><br><span class="label">Store the confirmed resolution for later.</span></div></div>
+    </div>
+    <div class="panel"><h2>Demo scenario</h2><p class="sub">__</p>
+      <div class="memory"><span class="id">DEMO</span><strong>Payment API — HTTP 503 <span class="badge">CRITICAL</span></strong><small>Customers are unable to complete payments. Try reporting this incident and see how historical memory changes the recommendation.</small></div>
+      <br><button class="primary" onclick="show('report')">Report this incident →</button>
+    </div>
+  </div>
+</section>
+
+<section id="report" class="hidden">
+  <div class="top"><div><h1>Report Incident</h1><div class="label">Give the agent enough context to reason about the failure.</div></div></div>
+  <div class="panel">
+    <form class="form" id="incidentForm">
+      <div class="row">
+        <label>Incident title<input id="title" required value="Payment API returning HTTP 503"></label>
+        <label>Affected service<input id="service" required value="Payment API"></label>
+      </div>
+      <div class="row">
+        <label>Error message<input id="error" required value="HTTP 503 - Service Unavailable"></label>
+        <label>Severity<select id="severity"><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select></label>
+      </div>
+      <label>Description<textarea id="description" required>Customers are unable to complete payments. The payment API is intermittently returning HTTP 503 responses.</textarea></label>
+      <button class="primary" type="submit">Analyze Incident →</button>
+    </form>
+  </div>
+</section>
+
+<section id="analysis" class="hidden">
+  <div class="top"><div><h1>Incident Analysis</h1><div class="label">Current incident + organizational memory + AI reasoning</div></div></div>
+  <div id="analysisContent"></div>
+</section>
+
+<section id="resolve" class="hidden">
+  <div class="top"><div><h1>Resolve & Learn</h1><div class="label">Turn the incident outcome into future organizational memory.</div></div></div>
+  <div class="panel">
+    <form class="form" id="resolveForm">
+      <label>Confirmed root cause<input id="rootCause" required value="Database connection pool exhaustion"></label>
+      <label>Action taken<textarea id="action" required>Increased database connection pool from 50 to 100 and monitored API recovery.</textarea></label>
+      <div class="row">
+        <label>Outcome<input id="outcome" required value="Successfully resolved"></label>
+        <label>Resolution time (minutes)<input id="resolutionTime" type="number" required value="18"></label>
+      </div>
+      <label>Was the recommendation helpful?<select id="helpful"><option value="true">Yes</option><option value="false">No</option></select></label>
+      <label>Post-mortem notes<textarea id="notes">The incident matched a previous payment API failure. Historical memory helped prioritize database connection investigation.</textarea></label>
+      <button class="primary" type="submit">Save Resolution & Learn →</button>
+    </form>
+  </div>
+</section>
+</main>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+let currentIncident = null;
+
+function show(id, btn){
+  document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block';
+  setTimeout(()=>t.style.display='none',3200);
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+
+document.getElementById('incidentForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  currentIncident={
+    title:title.value, service:service.value, error:error.value,
+    severity:severity.value, description:description.value
+  };
+  show('analysis');
+  analysisContent.innerHTML='<div class="panel"><h2>Searching organizational memory…</h2><p class="sub">MemoryOps is analyzing the incident and looking for similar experiences.</p></div>';
+  try{
+    const r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(currentIncident)});
+    const data=await r.json();
+    renderAnalysis(data);
+  }catch(err){
+    analysisContent.innerHTML='<div class="panel"><h2>Backend unavailable</h2><p class="sub">Start the FastAPI server and try again.</p></div>';
+  }
+});
+
+function renderAnalysis(data){
+  const memories=data.memories||[];
+  const rec=data.recommendation||{};
+  analysisContent.innerHTML=`
+  <div class="grid">
+    <div class="panel">
+      <h2>Current Incident</h2><p class="sub">${esc(data.incident.service)} · ${esc(data.incident.error)}</p>
+      <div class="memory"><b>${esc(data.incident.title)}</b><br><small>${esc(data.incident.description)}</small></div>
+      <div class="recommend"><b>AI recommendation</b><p>${esc(rec.summary)}</p>
+      ${(rec.steps||[]).map((x,i)=>`<div class="step"><div class="num">${i+1}</div><div>${esc(x)}</div></div>`).join('')}
+      ${rec.llm_analysis?`<hr style="border-color:#263554"><small>${esc(rec.llm_analysis)}</small>`:''}
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Hindsight Memory</h2><p class="sub">${memories.length} relevant historical memory item(s)</p>
+      ${memories.length?memories.map(m=>`
+        <div class="memory"><span class="id">${esc(m.id)}</span>
+        <strong>${esc(m.service)} · ${esc(m.error)}</strong>
+        <small><b>Root cause:</b> ${esc(m.root_cause||'See retrieved memory')}<br>
+        <b>Resolution:</b> ${esc(m.resolution||'See retrieved memory')}<br>
+        <b>Outcome:</b> ${esc(m.outcome||'Historical experience')}</small></div>`).join(''):
+        '<div class="memory"><strong>No matching memory</strong><small>The agent will start with general investigation guidance.</small></div>'}
+      <div class="recommend"><b>Why this recommendation?</b><div class="why">${(rec.why||[]).map(x=>'• '+esc(x)).join('<br>')}</div></div>
+    </div>
+  </div>
+  <br><button class="primary" onclick="show('resolve')">Record Resolution & Teach Agent →</button>
+  `;
+}
+
+document.getElementById('resolveForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  if(!currentIncident){show('report'); return;}
+  const payload={
+    incident:currentIncident,
+    root_cause:rootCause.value, action:action.value, outcome:outcome.value,
+    resolution_time:Number(resolutionTime.value),
+    helpful:helpful.value==='true', notes:notes.value
+  };
+  const r=await fetch('/api/resolve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  const data=await r.json();
+  toast(data.message + (data.stored_in_hindsight ? ' Hindsight storage confirmed.' : ' Demo memory updated locally.'));
+  show('dashboard');
+});
+</script>
+</body>
+</html>
